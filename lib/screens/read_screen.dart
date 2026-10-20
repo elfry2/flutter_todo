@@ -8,8 +8,12 @@ class ReadScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final formattedDate = task.deadline != null
+        ? task.deadline!.toLocal().toString().split(' ')[0]
+        : 'No deadline';
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Task Details (Read)')),
+      appBar: AppBar(title: const Text('Task Details')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -20,12 +24,21 @@ class ReadScreen extends StatelessWidget {
               style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 12),
-            Text(
-              'Status: ${task.isDone ? "Completed" : "Pending"}',
-              style: TextStyle(
-                color: task.isDone ? Colors.green : Colors.orange,
-                fontWeight: FontWeight.w600,
-              ),
+            Row(
+              children: [
+                Text(
+                  'Status: ${task.isDone ? "Completed" : "Pending"}',
+                  style: TextStyle(
+                    color: task.isDone ? Colors.green : Colors.orange,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(width: 24),
+                Text(
+                  'Due: $formattedDate',
+                  style: const TextStyle(fontWeight: FontWeight.w600, color: Colors.blueGrey),
+                ),
+              ],
             ),
             const Divider(height: 32),
             const Text(

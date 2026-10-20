@@ -3,12 +3,14 @@ class Task {
   String title;
   String description;
   bool isDone;
+  DateTime? deadline; // Added deadline field
 
   Task({
     required this.id,
     required this.title,
     this.description = '',
     this.isDone = false,
+    this.deadline,
   });
 
   Map<String, dynamic> toJson() => {
@@ -16,6 +18,7 @@ class Task {
         'title': title,
         'description': description,
         'isDone': isDone,
+        'deadline': deadline?.toIso8601String(), // Convert DateTime to String for storage
       };
 
   factory Task.fromJson(Map<String, dynamic> json) => Task(
@@ -23,5 +26,8 @@ class Task {
         title: json['title'],
         description: json['description'] ?? '',
         isDone: json['isDone'] ?? false,
+        deadline: json['deadline'] != null
+            ? DateTime.parse(json['deadline']) // Parse String back to DateTime
+            : null,
       );
 }

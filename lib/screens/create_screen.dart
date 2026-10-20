@@ -13,6 +13,21 @@ class _CreateScreenState extends State<CreateScreen> {
   final _titleController = TextEditingController();
   final _descController = TextEditingController();
   final TaskService _taskService = TaskService();
+  DateTime? _selectedDate;
+
+  Future<void> _pickDueDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: _selectedDate ?? DateTime.now(),
+      firstDate: DateTime.now(),
+      lastDate: DateTime(2100),
+    );
+    if (picked != null) {
+      setState(() {
+        _selectedDate = picked;
+      });
+    }
+  }
 
   void _saveTask() async {
     if (_titleController.text.trim().isEmpty) return;
@@ -21,6 +36,7 @@ class _CreateScreenState extends State<CreateScreen> {
       id: DateTime.now().toIso8601String(),
       title: _titleController.text.trim(),
       description: _descController.text.trim(),
+      deadline: _selectedDate,
     );
 
     await _taskService.addTask(newTask);
@@ -52,6 +68,24 @@ class _CreateScreenState extends State<CreateScreen> {
               controller: _descController,
               decoration: const InputDecoration(labelText: 'Description', border: OutlineInputBorder()),
               maxLines: 3,
+            ),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    _selectedDate == null
+                        ? 'No deadline chosen'
+                        : 'Deadline: ${_selectedDate!.toLocal().toString().split(' ')[0]}',
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                ),
+                TextButton.icon(
+                  onPressed: () => _pickDueDate(context),
+                  icon: const Icon(Icons.calendar_today),
+                  label: const Text('Select Date'),
+                ),
+              ],
             ),
             const SizedBox(height: 24),
             ElevatedButton(

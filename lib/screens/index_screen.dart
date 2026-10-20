@@ -46,62 +46,70 @@ class _IndexScreenState extends State<IndexScreen> {
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : _tasks.isEmpty
-              ? const Center(child: Text('No tasks found. Create one!'))
-              : ListView.builder(
-                  itemCount: _tasks.length,
-                  itemBuilder: (context, index) {
-                    final task = _tasks[index];
-                    return Card(
-                      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-                      child: ListTile(
-                        // Read Page Navigation on tap
-                        onTap: () async {
-                          await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => ReadScreen(task: task),
-                            ),
-                          );
-                          _fetchTasks();
-                        },
-                        title: Text(
-                          task.title,
-                          style: TextStyle(
-                            decoration: task.isDone ? TextDecoration.lineThrough : null,
-                          ),
+          ? const Center(child: Text('No tasks found. Create one!'))
+          : ListView.builder(
+              itemCount: _tasks.length,
+              itemBuilder: (context, index) {
+                final task = _tasks[index];
+                return Card(
+                  margin: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 6,
+                  ),
+                  child: ListTile(
+                    // Read Page Navigation on tap
+                    onTap: () async {
+                      await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => ReadScreen(task: task),
                         ),
-                        subtitle: Text(
-                          task.description,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        trailing: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            // Update Page Navigation
-                            IconButton(
-                              icon: const Icon(Icons.edit, color: Colors.blue),
-                              onPressed: () async {
-                                await Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (_) => UpdateScreen(task: task),
-                                  ),
-                                );
-                                _fetchTasks();
-                              },
-                            ),
-                            // Delete Action
-                            IconButton(
-                              icon: const Icon(Icons.delete, color: Colors.red),
-                              onPressed: () => _deleteTask(task.id),
-                            ),
-                          ],
-                        ),
+                      );
+                      _fetchTasks();
+                    },
+                    title: Text(
+                      task.title,
+                      style: TextStyle(
+                        decoration: task.isDone
+                            ? TextDecoration.lineThrough
+                            : null,
                       ),
-                    );
-                  },
-                ),
+                    ),
+                    // (In the ListView.builder inside screens/index_screen.dart)
+                    subtitle: Text(
+                      task.deadline != null
+                          ? '${task.description}\nDue: ${task.deadline!.toLocal().toString().split(' ')[0]}'
+                          : task.description,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        // Update Page Navigation
+                        IconButton(
+                          icon: const Icon(Icons.edit, color: Colors.blue),
+                          onPressed: () async {
+                            await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => UpdateScreen(task: task),
+                              ),
+                            );
+                            _fetchTasks();
+                          },
+                        ),
+                        // Delete Action
+                        IconButton(
+                          icon: const Icon(Icons.delete, color: Colors.red),
+                          onPressed: () => _deleteTask(task.id),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
       floatingActionButton: FloatingActionButton(
         // Create Page Navigation
         onPressed: () async {
