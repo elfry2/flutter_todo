@@ -2,7 +2,7 @@
 
 A clean, beginner-friendly **To-Do List application** built with [Flutter](https://flutter.dev/) designed specifically for educational purposes. 
 
-Lazily generated with Gemini Auto Low ([https://share.gemini.google/96eXu1N4rmWC](https://share.gemini.google/96eXu1N4rmWC)).
+Lazily generated with Gemini Auto Low ([https://share.gemini.google/lb3CzemIyF9H](https://share.gemini.google/lb3CzemIyF9H)).
 
 This project demonstrates core architectural principles, including **Separation of Concerns (SoC)**, **full CRUD operations** (Create, Read, Update, Delete) across dedicated screens, state management using Flutter's built-in `StatefulWidget`s, and local data persistence via `shared_preferences`.
 
